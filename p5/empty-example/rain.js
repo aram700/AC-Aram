@@ -1,6 +1,6 @@
-let rValue = 135;
-let gValue = 205;
-let bValue = 235;
+let rValue = 0;
+let gValue = 0;
+let bValue = 0;
 var song;
 var button;
 var fft;
@@ -13,7 +13,7 @@ var vol;
 var mic;
 var maxvolume;
 var minvolume;
-
+var fade;
 
 var ampHistory = [];
 
@@ -69,10 +69,13 @@ function volGetLevel() {
 }
 
 
+
 //DRAW--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 function draw() {
+
+
     volGetLevel();
     if (beat != 'mic') {
         song.setVolume(1);
@@ -82,15 +85,15 @@ function draw() {
     }
     strokeWeight(1);
 
-    if (gValue >= 105 && isTrue) {
-        gValue -= 2;
+    if (gValue <= 105 && isTrue) {
+        gValue += 2;
 
     }
-    if (bValue >= 105 && isTrue) {
-        bValue -= 2;
+    if (bValue <= 105 && isTrue) {
+        bValue += 2;
     }
-    if (rValue >= 105 && isTrue) {
-        rValue -= 2;
+    if (rValue <= 105 && isTrue) {
+        rValue += 2;
     }
     /* else if (lyub <= 5 && lyub > 0) {
          b += 5;
@@ -159,33 +162,98 @@ function draw() {
         var b = random(height / 2, height)
         line(a, b, a + random(-20, 20), 0);
     }
+    if (beat == 7) {
+        fade = vol * 300;
+        if (isDrop) {
+            stroke(0, 255, 255, 255);
+        }
+        else {
+            stroke(255, fade);
+        }
+        strokeWeight(10);
+        line(100, 100, 200, 300);
+        line(200, 300, 250, 200);
+        line(250, 200, 310, 310);
+        line(310, 310, 370, 150);
+        if (isDrop) {
+            stroke(0, 100, 255, 255);
+        }
+        else {
+            stroke(255, fade);
+        }
+        line(250, 150, 160, 300);
+        line(250, 150, 340, 300);
+    }
 }
+
+//END_OF_DRAW----------------------------------------------------------------------------------------------------
+//MOUSE_PRESSED----------------------------------------------------------------------------------------------------
 
 function mousePressed() {
     if (beat != 'mic') {
-        rValue = 135;
-        gValue = 205;
-        bValue = 235;
+        rValue = 0;
+        gValue = 0;
+        bValue = 0;
         togglePlay();
         if (isTrue) {
             isTrue = false;
+            fade = 0;
+            time = 0;
         }
         else {
             isTrue = true;
+            fade = 255;
+            time = 120;
         }
     }
     else {
-        rValue = 135;
-        gValue = 205;
-        bValue = 235;
+        rValue = 0;
+        gValue = 0;
+        bValue = 0;
+
         toggleListen();
         if (isTrue) {
             isTrue = false;
+
         }
         else {
             isTrue = true;
+
         }
     }
 }
+//KEY_PRESSED----------------------------------------------------------------------------------------------------
+function keyPressed() {
+    if (keyCode == 32) {
+        if (beat != 'mic') {
+            rValue = 0;
+            gValue = 0;
+            bValue = 0;
+            togglePlay();
+            if (isTrue) {
+                isTrue = false;
+                fade = 0;
+                time = 0;
+            }
+            else {
+                isTrue = true;
+                fade = 255;
+                time = 120;
+            }
+        }
+        else {
+            rValue = 0;
+            gValue = 0;
+            bValue = 0;
 
+            toggleListen();
+            if (isTrue) {
+                isTrue = false;
+            }
+            else {
+                isTrue = true;
+            }
+        }
+    }
+}
 
